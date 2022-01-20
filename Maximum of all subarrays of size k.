@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int>res;
+
+void heapify(vector<int>&heap,int k,int i){
+    int largest = i;
+    int l= 2*i+1;
+    int r= 2*i+2;
+
+    if(l<k && heap[l]>heap[largest]){
+        largest=l;
+    }
+    if(r<k && heap[r]>heap[largest]){
+        largest=r;
+    }
+
+    if(i!=largest){
+        swap(heap[i],heap[largest]);
+        heapify(heap,k,largest);
+    }
+}
+
+void maxandprint(vector<int>heap,int n){
+
+    // for(int i=0;i<n;i++) cout<<heap[i]<<" ";
+
+    // cout<<endl;
+
+    heapify(heap,n,0);
+
+    res.push_back(heap[0]);
+}
+
+void printMax(int arr[],int n,int k){
+    vector<int>heap(k);
+    for(int i=0;i<k;i++){
+        // cout<<"here "<<arr[i]<<endl;
+        heap.push_back(arr[i]);
+        // cout<<"there "<<heap[i]<<endl;
+    }
+
+    maxandprint(heap,k);
+
+    for(int i=k;i<n;i++){
+        int temp=i%k;
+        heap[temp]=arr[i];
+        maxandprint(heap,k);
+    }
+
+}
+
+int main(){
+    int n;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+
+    int k;cin>>k;
+    // cout<<k<<endl;
+    printMax(arr,n,k);
+    for(int i=0;i<res.size();i++){
+        cout<<res[i]<<" ";
+    }
+
+    return 0;
+}
