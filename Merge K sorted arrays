@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class element{
+public:
+    int value;
+    int index;
+    int row;
+
+    element(int v,int i,int n){
+        value=v;
+        index=i;
+        row=n;
+    }
+};
+
+struct comapre{
+    bool operator()(element a,element b){
+        return a.value>b.value;
+    }
+};
+
+
+
+vector<int> mergeKArrays(vector<vector<int>>arr,int k){
+
+    priority_queue<element,vector<element>,compare>q;
+
+    for(int i=0;i<k;i++){
+        element temp(arr[i][0],0,i);
+        q.push(temp);
+    }
+
+    vector<int>ans;
+
+    while(!q.empty()){
+        element current = q.top();
+        q.pop();
+        ans.push_back(current.value);
+        if(current.index < k-1){
+            int row = current.row;
+            int index = current.index + 1;
+            int val = arr[row][index];
+            element temp(val,index,row);
+            q.push(temp);
+        }
+    }
+
+    return ans;
+}
+
+int main(){
+    int k;
+    vector<vector<int>>arr(k,vector<int>(k));
+
+    for(int i=0;i<k;k++){
+        for(int j=0;j<k;j++){
+            cin>>arr[i][j];
+        }
+    }
+
+    vector<int>ans;
+    ans=mergeKArrays(arr,k);
+
+    for(int i=0;i<ans.size();i++){
+        cout<<ans[i]<<" ";
+    }
+}
