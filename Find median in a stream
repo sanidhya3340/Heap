@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+double median;
+priority_queue<int>maxx;
+priority_queue<int,vector<int>,greater<int>>minn;
+
+void balanceHeaps(){
+    if(abs(maxx.size()-minn.size()) > 1){
+        if(maxx.size() > minn.size()){
+            minn.push(maxx.top());
+            maxx.pop();
+        }
+        else{
+            maxx.push(minn.top());
+            minn.pop();
+        }
+    }
+}
+
+void insertHeap(int x){
+    if(maxx.empty()){
+        maxx.push(x);
+    }
+    else if(x>maxx.top()){
+        minn.push(x);
+    }
+    else if(minn.empty()){
+        minn.push(maxx.top());
+        maxx.pop();
+        maxx.push(x);
+    }
+    else
+        maxx.push(x);
+
+    balanceHeaps();
+}
+
+double getMedian(){
+    if((maxx.size()+minn.size())%2 == 0){
+        median= (maxx.top()+minn.top());
+        median/=2;
+    }else{
+        if(minn.empty())
+            median=maxx.top();
+        else if(minn.size()<maxx.size())
+            median=maxx.top();
+        else
+            median=minn.top();
+    }
+    return median;
+}
+
+int main(){
+    int n;cin>>n;
+    int x;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        insertHeap(x);
+        cout<<getMedian()<<endl;
+    }
+}
